@@ -1,0 +1,102 @@
+[
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-mdpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-mdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-hdpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-hdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxhdpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-ldpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-ldpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-mdpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-mdpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-hdpi_ic_launcher_foreground.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-hdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxxhdpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxxhdpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxhdpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxhdpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xhdpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xhdpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-mdpi_ic_launcher_foreground.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-mdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxxhdpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxxhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xhdpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xhdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxhdpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-ldpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-ldpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/drawable_ic_splash.xml.flat",
+        "source": "com.venkat.healthapp-main-76:/drawable/ic_splash.xml"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xhdpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxhdpi/ic_launcher_foreground.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-mdpi_ic_launcher.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-mdpi/ic_launcher.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/xml_file_paths.xml.flat",
+        "source": "com.venkat.healthapp-main-76:/xml/file_paths.xml"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-ldpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-ldpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-hdpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-hdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-hdpi_drugs.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-hdpi/drugs.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xxxhdpi_ic_launcher_round.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xxxhdpi/ic_launcher_round.png"
+    },
+    {
+        "merged": "com.venkat.healthapp-debug-74:/mipmap-xhdpi_ic_launcher_foreground.png.flat",
+        "source": "com.venkat.healthapp-main-76:/mipmap-xhdpi/ic_launcher_foreground.png"
+    }
+]

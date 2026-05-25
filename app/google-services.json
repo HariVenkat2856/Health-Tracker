@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "807620171706",
+    "project_id": "health-tracker-1c82d",
+    "storage_bucket": "health-tracker-1c82d.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:807620171706:android:715c5e9836b4e50c5f6f83",
+        "android_client_info": {
+          "package_name": "com.venkat.healthapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "807620171706-29037nv3hem0qvaimnm532u8gcv20gfj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.venkat.healthapp",
+            "certificate_hash": "fdb3002ce51c26717988b9c0849e1e2b7b1f7a7a"
+          }
+        },
+        {
+          "client_id": "807620171706-oqghfs9b7qoo64vvimfphv439mgnekuj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAyzRPuIFIJFBSWZzmdg7YgxMqFnlPFCfk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "807620171706-oqghfs9b7qoo64vvimfphv439mgnekuj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
