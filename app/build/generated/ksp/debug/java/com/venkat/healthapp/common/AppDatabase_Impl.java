@@ -23,6 +23,8 @@ import com.venkat.healthapp.expense.data.PartialPaymentDao;
 import com.venkat.healthapp.expense.data.PartialPaymentDao_Impl;
 import com.venkat.healthapp.expense.data.SplitExpenseDao;
 import com.venkat.healthapp.expense.data.SplitExpenseDao_Impl;
+import com.venkat.healthapp.expense.receipt.ReceiptDao;
+import com.venkat.healthapp.expense.receipt.ReceiptDao_Impl;
 import com.venkat.healthapp.food.data.FoodItemDao;
 import com.venkat.healthapp.food.data.FoodItemDao_Impl;
 import com.venkat.healthapp.food.data.FoodLogDao;
@@ -95,10 +97,12 @@ public final class AppDatabase_Impl extends AppDatabase {
 
   private volatile VaultDao _vaultDao;
 
+  private volatile ReceiptDao _receiptDao;
+
   @Override
   @NonNull
   protected SupportSQLiteOpenHelper createOpenHelper(@NonNull final DatabaseConfiguration config) {
-    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(6) {
+    final SupportSQLiteOpenHelper.Callback _openCallback = new RoomOpenHelper(config, new RoomOpenHelper.Delegate(7) {
       @Override
       public void createAllTables(@NonNull final SupportSQLiteDatabase db) {
         db.execSQL("CREATE TABLE IF NOT EXISTS `task_logs` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `date` TEXT NOT NULL, `taskId` TEXT NOT NULL, `taskName` TEXT NOT NULL, `section` TEXT NOT NULL, `completed` INTEGER NOT NULL, `completedAt` INTEGER NOT NULL)");
@@ -120,8 +124,9 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("CREATE TABLE IF NOT EXISTS `split_expense` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `title` TEXT NOT NULL, `totalAmount` REAL NOT NULL, `date` TEXT NOT NULL, `paidBy` TEXT NOT NULL, `note` TEXT NOT NULL, `isSettled` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `split_member` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `splitExpenseId` INTEGER NOT NULL, `name` TEXT NOT NULL, `phone` TEXT NOT NULL, `shareAmount` REAL NOT NULL, `isPaid` INTEGER NOT NULL, `paidAt` INTEGER NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS `vault_items` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `category` TEXT NOT NULL, `title` TEXT NOT NULL, `username` TEXT NOT NULL, `encryptedPassword` TEXT NOT NULL, `encryptedExtra` TEXT NOT NULL, `note` TEXT NOT NULL, `website` TEXT NOT NULL, `isFavorite` INTEGER NOT NULL, `createdAt` INTEGER NOT NULL, `updatedAt` INTEGER NOT NULL)");
+        db.execSQL("CREATE TABLE IF NOT EXISTS `receipts` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `expenseId` INTEGER NOT NULL, `imagePath` TEXT NOT NULL, `ocrText` TEXT NOT NULL, `detectedAmount` REAL NOT NULL, `detectedDate` TEXT NOT NULL, `detectedMerchant` TEXT NOT NULL, `note` TEXT NOT NULL, `capturedAt` INTEGER NOT NULL, `date` TEXT NOT NULL)");
         db.execSQL("CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)");
-        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5b07734b35694609233624a725b15371')");
+        db.execSQL("INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '0412b8f781ff9e30ad42704c0a79ce74')");
       }
 
       @Override
@@ -144,6 +149,7 @@ public final class AppDatabase_Impl extends AppDatabase {
         db.execSQL("DROP TABLE IF EXISTS `split_expense`");
         db.execSQL("DROP TABLE IF EXISTS `split_member`");
         db.execSQL("DROP TABLE IF EXISTS `vault_items`");
+        db.execSQL("DROP TABLE IF EXISTS `receipts`");
         final List<? extends RoomDatabase.Callback> _callbacks = mCallbacks;
         if (_callbacks != null) {
           for (RoomDatabase.Callback _callback : _callbacks) {
@@ -517,9 +523,29 @@ public final class AppDatabase_Impl extends AppDatabase {
                   + " Expected:\n" + _infoVaultItems + "\n"
                   + " Found:\n" + _existingVaultItems);
         }
+        final HashMap<String, TableInfo.Column> _columnsReceipts = new HashMap<String, TableInfo.Column>(10);
+        _columnsReceipts.put("id", new TableInfo.Column("id", "INTEGER", true, 1, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("expenseId", new TableInfo.Column("expenseId", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("imagePath", new TableInfo.Column("imagePath", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("ocrText", new TableInfo.Column("ocrText", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("detectedAmount", new TableInfo.Column("detectedAmount", "REAL", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("detectedDate", new TableInfo.Column("detectedDate", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("detectedMerchant", new TableInfo.Column("detectedMerchant", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("note", new TableInfo.Column("note", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("capturedAt", new TableInfo.Column("capturedAt", "INTEGER", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        _columnsReceipts.put("date", new TableInfo.Column("date", "TEXT", true, 0, null, TableInfo.CREATED_FROM_ENTITY));
+        final HashSet<TableInfo.ForeignKey> _foreignKeysReceipts = new HashSet<TableInfo.ForeignKey>(0);
+        final HashSet<TableInfo.Index> _indicesReceipts = new HashSet<TableInfo.Index>(0);
+        final TableInfo _infoReceipts = new TableInfo("receipts", _columnsReceipts, _foreignKeysReceipts, _indicesReceipts);
+        final TableInfo _existingReceipts = TableInfo.read(db, "receipts");
+        if (!_infoReceipts.equals(_existingReceipts)) {
+          return new RoomOpenHelper.ValidationResult(false, "receipts(com.venkat.healthapp.expense.receipt.Receipt).\n"
+                  + " Expected:\n" + _infoReceipts + "\n"
+                  + " Found:\n" + _existingReceipts);
+        }
         return new RoomOpenHelper.ValidationResult(true, null);
       }
-    }, "5b07734b35694609233624a725b15371", "4f0f43b330ccdac4636e9167fcbfe111");
+    }, "0412b8f781ff9e30ad42704c0a79ce74", "f0a1ae154e4735148962fda4bcbfd125");
     final SupportSQLiteOpenHelper.Configuration _sqliteConfig = SupportSQLiteOpenHelper.Configuration.builder(config.context).name(config.name).callback(_openCallback).build();
     final SupportSQLiteOpenHelper _helper = config.sqliteOpenHelperFactory.create(_sqliteConfig);
     return _helper;
@@ -530,7 +556,7 @@ public final class AppDatabase_Impl extends AppDatabase {
   protected InvalidationTracker createInvalidationTracker() {
     final HashMap<String, String> _shadowTablesMap = new HashMap<String, String>(0);
     final HashMap<String, Set<String>> _viewTables = new HashMap<String, Set<String>>(0);
-    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "task_logs","daily_summary","scalp_photos","food_items","food_logs","user_profile","water_logs","sleep_logs","workout_logs","workout_progress","expenses","expense_budget","expense_reminder","lend_borrow","partial_payment","split_expense","split_member","vault_items");
+    return new InvalidationTracker(this, _shadowTablesMap, _viewTables, "task_logs","daily_summary","scalp_photos","food_items","food_logs","user_profile","water_logs","sleep_logs","workout_logs","workout_progress","expenses","expense_budget","expense_reminder","lend_borrow","partial_payment","split_expense","split_member","vault_items","receipts");
   }
 
   @Override
@@ -557,6 +583,7 @@ public final class AppDatabase_Impl extends AppDatabase {
       _db.execSQL("DELETE FROM `split_expense`");
       _db.execSQL("DELETE FROM `split_member`");
       _db.execSQL("DELETE FROM `vault_items`");
+      _db.execSQL("DELETE FROM `receipts`");
       super.setTransactionSuccessful();
     } finally {
       super.endTransaction();
@@ -588,6 +615,7 @@ public final class AppDatabase_Impl extends AppDatabase {
     _typeConvertersMap.put(PartialPaymentDao.class, PartialPaymentDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(SplitExpenseDao.class, SplitExpenseDao_Impl.getRequiredConverters());
     _typeConvertersMap.put(VaultDao.class, VaultDao_Impl.getRequiredConverters());
+    _typeConvertersMap.put(ReceiptDao.class, ReceiptDao_Impl.getRequiredConverters());
     return _typeConvertersMap;
   }
 
@@ -840,6 +868,20 @@ public final class AppDatabase_Impl extends AppDatabase {
           _vaultDao = new VaultDao_Impl(this);
         }
         return _vaultDao;
+      }
+    }
+  }
+
+  @Override
+  public ReceiptDao receiptDao() {
+    if (_receiptDao != null) {
+      return _receiptDao;
+    } else {
+      synchronized(this) {
+        if(_receiptDao == null) {
+          _receiptDao = new ReceiptDao_Impl(this);
+        }
+        return _receiptDao;
       }
     }
   }

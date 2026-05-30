@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.venkat.healthapp-mergeDebugResources-72:/values-v31/values-v31.xml",
+            "outputFile": "com.venkat.healthapp-mergeDebugResources-74:/values-v31/values-v31.xml",
             "map": [
                 {
                     "source": "C:\\Users\\VHARIDAS\\.gradle\\caches\\transforms-4\\f71d32797c0c237746387fbc79bcbe9c\\transformed\\jetified-core-splashscreen-1.0.1\\res\\values-v31\\values-v31.xml",

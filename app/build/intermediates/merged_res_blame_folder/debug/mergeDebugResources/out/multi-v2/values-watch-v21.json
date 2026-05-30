@@ -1,0 +1,20 @@
+{
+    "logs": [
+        {
+            "outputFile": "com.venkat.healthapp-mergeDebugResources-74:/values-watch-v21/values-watch-v21.xml",
+            "map": [
+                {
+                    "source": "C:\\Users\\VHARIDAS\\.gradle\\caches\\transforms-4\\3b34dff5ae8906b6a7a124bcfca5a14c\\transformed\\appcompat-1.6.1\\res\\values-watch-v21\\values-watch-v21.xml",
+                    "from": {
+                        "startLines": "2,6,10",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,271,499",
+                        "endLines": "5,9,13",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "266,494,724"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -23,8 +23,6 @@ import java.util.*
 
 @Composable
 fun HomeScreen(
-
-
     vm: MainViewModel,
     onHairTracker: () -> Unit,
     onFoodTracker: () -> Unit,
@@ -32,17 +30,15 @@ fun HomeScreen(
     onSleepTracker: () -> Unit,
     onWorkoutTracker: () -> Unit,
     onExpenseTracker: () -> Unit,
-    onVault: () -> Unit
-)
-
-
-
-{
+    onVault: () -> Unit,
+    onLogout: () -> Unit,
+    onReceiptScanner: () -> Unit
+) {
     val (hairDone, hairTotal) = vm.todayProgress.collectAsState().value
-    val waterMl   by vm.waterToday.collectAsState()
+    val waterMl     by vm.waterToday.collectAsState()
     val waterTarget by vm.waterTarget.collectAsState()
-    val nutrition by vm.todayNutrition.collectAsState()
-    val targets   by vm.nutritionTargets.collectAsState()
+    val nutrition   by vm.todayNutrition.collectAsState()
+    val targets     by vm.nutritionTargets.collectAsState()
 
     val greeting = remember {
         when (Calendar.getInstance().get(Calendar.HOUR_OF_DAY)) {
@@ -56,6 +52,90 @@ fun HomeScreen(
         SimpleDateFormat("EEE, dd MMM yyyy", Locale.getDefault()).format(Date())
     }
 
+    val user by vm.currentUser.collectAsState()
+
+    val currentUser = user // local snapshot — enables smart cast
+
+    // ── Name setup dialog (shows if name is blank/empty after login) ──
+    var showNameDialog by remember { mutableStateOf(false) }
+    var nameInput by remember { mutableStateOf("") }
+    var nameError by remember { mutableStateOf(false) }
+
+    // Trigger dialog if user has no name set
+    LaunchedEffect(user) {
+        if (user != null && user!!.displayName.isBlank()) {
+            showNameDialog = true
+        }
+    }
+
+    if (showNameDialog) {
+        AlertDialog(
+            onDismissRequest = { /* force them to enter name — don't dismiss */ },
+            containerColor = CardDark,
+            title = {
+                Column(horizontalAlignment = Alignment.CenterHorizontally,
+                    modifier = Modifier.fillMaxWidth()) {
+                    Text("👋", fontSize = 36.sp)
+                    Spacer(Modifier.height(8.dp))
+                    Text(
+                        "Welcome! What's your name?",
+                        color = TextPrimary,
+                        fontWeight = FontWeight.Bold,
+                        fontSize = 18.sp
+                    )
+                }
+            },
+            text = {
+                Column {
+                    Text(
+                        "Please enter your name to personalize your experience.",
+                        color = TextMuted,
+                        fontSize = 13.sp
+                    )
+                    Spacer(Modifier.height(12.dp))
+                    OutlinedTextField(
+                        value = nameInput,
+                        onValueChange = {
+                            nameInput = it
+                            nameError = false
+                        },
+                        placeholder = { Text("e.g. Venkatramana", color = TextMuted) },
+                        singleLine = true,
+                        isError = nameError,
+                        supportingText = {
+                            if (nameError) Text("Name cannot be empty", color = MaterialTheme.colorScheme.error)
+                        },
+                        colors = OutlinedTextFieldDefaults.colors(
+                            focusedBorderColor = Accent,
+                            unfocusedBorderColor = BorderDark,
+                            focusedTextColor = TextPrimary,
+                            unfocusedTextColor = TextPrimary,
+                            cursorColor = Accent
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        if (nameInput.isBlank()) {
+                            nameError = true
+                        } else {
+                            vm.updateDisplayName(nameInput.trim())
+                            showNameDialog = false
+                        }
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = Accent),
+                    shape = RoundedCornerShape(10.dp),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Save & Continue", color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            }
+        )
+    }
+
     Column(
         Modifier
             .fillMaxSize()
@@ -65,24 +145,111 @@ fun HomeScreen(
     ) {
         Spacer(Modifier.height(20.dp))
 
-        // ── Greeting header ───────────────────────────────────────────────────
+        // ── User Header with Logout ──
+        if (currentUser  != null) {
+            var showLogoutConfirm by remember { mutableStateOf(false) }
+
+            Row(
+                Modifier
+                    .fillMaxWidth()
+                    .clip(RoundedCornerShape(16.dp))
+                    .background(CardDark)
+                    .border(1.dp, BorderDark, RoundedCornerShape(16.dp))
+                    .padding(14.dp),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    // Avatar — initials from real name
+                    Box(
+                        Modifier
+                            .size(44.dp)
+                            .clip(CircleShape)
+                            .background(Accent.copy(0.2f)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(
+                            currentUser .displayName.take(2).uppercase(),
+                            fontSize = 16.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = Accent
+                        )
+                    }
+                    Column {
+                        Text(
+                            currentUser .displayName,
+                            fontSize = 15.sp,
+                            fontWeight = FontWeight.Bold,
+                            color = TextPrimary
+                        )
+                        Text(currentUser .email, fontSize = 12.sp, color = TextMuted)
+                    }
+                }
+
+                IconButton(onClick = { showLogoutConfirm = true }) {
+                    Icon(Icons.Default.Logout, contentDescription = "Logout", tint = TextMuted)
+                }
+            }
+
+            if (showLogoutConfirm) {
+                AlertDialog(
+                    onDismissRequest = { showLogoutConfirm = false },
+                    containerColor = CardDark,
+                    title = { Text("Logout?", color = TextPrimary, fontWeight = FontWeight.Bold) },
+                    text = {
+                        Text(
+                            "Your data is safely synced to cloud.\nYou can login anytime to restore everything.",
+                            color = TextMuted, fontSize = 13.sp
+                        )
+                    },
+                    confirmButton = {
+                        Button(
+                            onClick = { showLogoutConfirm = false; onLogout() },
+                            colors = ButtonDefaults.buttonColors(containerColor = RedPill),
+                            shape = RoundedCornerShape(10.dp)
+                        ) {
+                            Text("Logout", color = Color.White, fontWeight = FontWeight.Bold)
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showLogoutConfirm = false }) {
+                            Text("Cancel", color = TextMuted)
+                        }
+                    }
+                )
+            }
+        }
+
+        Spacer(Modifier.height(16.dp))
+
+        // ── Greeting Header — uses real user name ──
         Box(
             Modifier
                 .fillMaxWidth()
                 .clip(RoundedCornerShape(20.dp))
-                .background(
-                    Brush.linearGradient(listOf(Color(0xFF0D2A1F), Color(0xFF0A1628), BgDark))
-                )
+                .background(Brush.linearGradient(listOf(Color(0xFF0D2A1F), Color(0xFF0A1628), BgDark)))
                 .border(1.dp, Accent.copy(0.3f), RoundedCornerShape(20.dp))
                 .padding(20.dp)
         ) {
             Column {
-                Text(greeting, color = Accent, fontSize = 13.sp, fontWeight = FontWeight.SemiBold, letterSpacing = 1.sp)
+                Text(greeting, color = Accent, fontSize = 13.sp,
+                    fontWeight = FontWeight.SemiBold, letterSpacing = 1.sp)
                 Spacer(Modifier.height(4.dp))
-                Text("Venkatramana 👋", fontSize = 26.sp, fontWeight = FontWeight.Black, color = TextPrimary)
+
+                // ✅ Real user name here instead of hardcoded
+                val displayName = user?.displayName?.ifBlank { "there" } ?: "there"
+                Text(
+                    "$displayName 👋",
+                    fontSize = 26.sp,
+                    fontWeight = FontWeight.Black,
+                    color = TextPrimary
+                )
+
                 Text(dateStr, color = TextMuted, fontSize = 13.sp)
                 Spacer(Modifier.height(14.dp))
-                // Quick stats row
                 Row(horizontalArrangement = Arrangement.spacedBy(10.dp)) {
                     QuickStat("💊", "$hairDone/$hairTotal", "Medicines", Accent, Modifier.weight(1f))
                     QuickStat("💧", "${waterMl}ml", "Water", AccentBlue, Modifier.weight(1f))
@@ -98,107 +265,96 @@ fun HomeScreen(
 
         Spacer(Modifier.height(16.dp))
 
-        // ── Feature cards ─────────────────────────────────────────────────────
         FeatureCard(
-            emoji = "💆",
-            title = "Hair Tracker",
+            emoji = "💆", title = "Hair Tracker",
             subtitle = "Daily medicines • Photo journal • Progress",
-            accentColor = Accent,
-            gradientColors = listOf(Color(0xFF0D2A1F), Color(0xFF081A13)),
+            accentColor = Accent, gradientColors = listOf(Color(0xFF0D2A1F), Color(0xFF081A13)),
             progress = if (hairTotal > 0) hairDone.toFloat() / hairTotal else 0f,
             progressLabel = "$hairDone of $hairTotal tasks done today",
             badges = listOf("13 Medicines", "Weekly Photos", "Alarms"),
             onClick = onHairTracker
         )
-
         Spacer(Modifier.height(14.dp))
 
         FeatureCard(
-            emoji = "🥗",
-            title = "Food Tracker",
+            emoji = "🥗", title = "Food Tracker",
             subtitle = "Indian foods • Nutrition calculator • Body goals",
-            accentColor = Gold,
-            gradientColors = listOf(Color(0xFF2A1F0D), Color(0xFF1A1308)),
+            accentColor = Gold, gradientColors = listOf(Color(0xFF2A1F0D), Color(0xFF1A1308)),
             progress = if ((targets?.calories ?: 0) > 0)
                 ((nutrition["calories"] ?: 0f) / (targets?.calories ?: 1)).coerceIn(0f, 1f) else 0f,
             progressLabel = "${(nutrition["calories"] ?: 0f).toInt()} / ${targets?.calories ?: 0} kcal",
             badges = listOf("55+ Indian Foods", "Protein Tracker", "Body Goals"),
             onClick = onFoodTracker
         )
-
         Spacer(Modifier.height(14.dp))
 
         FeatureCard(
-            emoji = "💧",
-            title = "Water Tracker",
+            emoji = "💧", title = "Water Tracker",
             subtitle = "3L daily goal • Hourly reminders • Liquid animation",
-            accentColor = AccentBlue,
-            gradientColors = listOf(Color(0xFF0A1628), Color(0xFF060E1A)),
+            accentColor = AccentBlue, gradientColors = listOf(Color(0xFF0A1628), Color(0xFF060E1A)),
             progress = if (waterTarget > 0) (waterMl.toFloat() / waterTarget).coerceIn(0f, 1f) else 0f,
             progressLabel = "${waterMl}ml / ${waterTarget}ml",
             badges = listOf("Hourly Alarms", "2 Bottles", "Sensor Tilt"),
             onClick = onWaterTracker
         )
-
         Spacer(Modifier.height(14.dp))
-        // ── Coming soon ───────────────────────────────────────────────────────
+
         FeatureCard(
-            emoji          = "🏋️",
-            title          = "Workout Tracker",
-            subtitle       = "PPL Split • Exercise GIFs • Diet Plan",
-            accentColor    = Gold,
-            gradientColors = listOf(Color(0xFF1A0D2E), Color(0xFF0D1117)),
-            progress       = 0f,
-            progressLabel  = "Start today's workout",
-            badges         = listOf("PPL Split", "GIF Guide", "Veg Diet"),
-            onClick        = onWorkoutTracker
+            emoji = "🏋️", title = "Workout Tracker",
+            subtitle = "PPL Split • Exercise GIFs • Diet Plan",
+            accentColor = Gold, gradientColors = listOf(Color(0xFF1A0D2E), Color(0xFF0D1117)),
+            progress = 0f, progressLabel = "Start today's workout",
+            badges = listOf("PPL Split", "GIF Guide", "Veg Diet"),
+            onClick = onWorkoutTracker
         )
-
         Spacer(Modifier.height(14.dp))
+
         FeatureCard(
-            emoji          = "💰",
-            title          = "Expense Tracker",
-            subtitle       = "Track spending • Note reminders • Analytics",
-            accentColor    = Gold,
-            gradientColors = listOf(Color(0xFF1A1200), Color(0xFF0D1117)),
-            progress       = 0f,
-            progressLabel  = "Track your spending",
-            badges         = listOf("Note Reminder", "Categories", "Monthly"),
-            onClick        = onExpenseTracker
+            emoji = "💰", title = "Expense Tracker",
+            subtitle = "Track spending • Note reminders • Analytics",
+            accentColor = Gold, gradientColors = listOf(Color(0xFF1A1200), Color(0xFF0D1117)),
+            progress = 0f, progressLabel = "Track your spending",
+            badges = listOf("Note Reminder", "Categories", "Monthly"),
+            onClick = onExpenseTracker
         )
-
         Spacer(Modifier.height(14.dp))
+
         FeatureCard(
-            emoji          = "🔐",
-            title          = "Secure Vault",
-            subtitle       = "Bank accounts • Passwords • Encrypted",
-            accentColor    = Accent,
+            emoji = "🔐", title = "Secure Vault",
+            subtitle = "Bank accounts • Passwords • Encrypted",
+            accentColor = Accent, gradientColors = listOf(Color(0xFF0A1628), Color(0xFF0D1117)),
+            progress = 0f, progressLabel = "PIN protected • AES-256 encrypted",
+            badges = listOf("Encrypted", "PIN Lock", "Recovery"),
+            onClick = onVault
+        )
+        Spacer(Modifier.height(14.dp))
+
+        // Add to feature cards
+        FeatureCard(
+            emoji          = "📸",
+            title          = "Receipt Scanner",
+            subtitle       = "Scan bills • OCR amount detection • Link to expense",
+            accentColor    = AccentBlue,
             gradientColors = listOf(Color(0xFF0A1628), Color(0xFF0D1117)),
             progress       = 0f,
-            progressLabel  = "PIN protected • AES-256 encrypted",
-            badges         = listOf("Encrypted", "PIN Lock", "Recovery"),
-            onClick        = onVault
+            progressLabel  = "Scan your receipts",
+            badges         = listOf("OCR Scanner", "Auto Amount", "Photo Store"),
+            onClick        = onReceiptScanner
         )
 
-
-
-        Spacer(Modifier.height(14.dp))
-        Row(Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.spacedBy(10.dp)) {
-            FeatureCard(
-                emoji          = "😴",
-                title          = "Sleep Tracker",
-                subtitle       = "Track rest • Quality • Duration",
-                accentColor    = Purple,
-                gradientColors = listOf(Color(0xFF1A0A2E), Color(0xFF100820)),
-                progress       = 0f,
-                progressLabel  = "Log last night's sleep",
-                badges         = listOf("Moon Chart", "Bar Graph", "Tips"),
-                onClick        = onSleepTracker
-            )
-            ComingSoonCard("😴", "Sleep\nTracker", Modifier.weight(1f))
-        }
         Spacer(Modifier.height(14.dp))
 
+
+        FeatureCard(
+            emoji = "😴", title = "Sleep Tracker",
+            subtitle = "Track rest • Quality • Duration",
+            accentColor = Purple, gradientColors = listOf(Color(0xFF1A0A2E), Color(0xFF100820)),
+            progress = 0f, progressLabel = "Log last night's sleep",
+            badges = listOf("Moon Chart", "Bar Graph", "Tips"),
+            onClick = onSleepTracker
+        )
+
+        Spacer(Modifier.height(24.dp))
     }
 }
 

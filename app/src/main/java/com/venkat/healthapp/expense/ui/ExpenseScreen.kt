@@ -22,12 +22,16 @@ import androidx.compose.ui.unit.*
 import com.venkat.healthapp.MainViewModel
 import com.venkat.healthapp.common.*
 import com.venkat.healthapp.expense.data.*
+import com.venkat.healthapp.expense.insights.InsightScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExpenseScreen(vm: MainViewModel) {
     var selectedTab by remember { mutableIntStateOf(0) }
-    val tabs = listOf("Today", "Monthly", "Add Note", "Analytics", "Lend/Borrow", "Split")
+    val tabs = listOf("Today", "Monthly", "Add Note", "Analytics", "Lend/Borrow", "Split", "Insights")
+//    val tabs = listOf("Today", "Monthly", "Add Note", "Analytics", "Insights")
+
+
 
     Column(Modifier.fillMaxSize().background(BgDark)) {
         ScrollableTabRow(
@@ -57,6 +61,8 @@ fun ExpenseScreen(vm: MainViewModel) {
             3 -> AnalyticsTab(vm)
             4 -> LendBorrowScreen(vm)
             5 -> SplitExpenseScreen(vm)
+            6 -> InsightScreen(vm)
+
         }
     }
 }
@@ -157,9 +163,30 @@ fun TodayExpenseTab(vm: MainViewModel) {
                             )
                         }
                     }
+
+                    // Add inside ExpenseCard, after the note row
+                    Row(
+                        Modifier.fillMaxWidth().padding(top = 4.dp),
+                        horizontalArrangement = Arrangement.spacedBy(6.dp)
+                    ) {
+                        // Existing edit/delete buttons...
+
+                        // Add receipt button
+                        TextButton(
+                            onClick = { /* navigate to receipt screen */ },
+                            modifier = Modifier.height(28.dp),
+                            contentPadding = PaddingValues(horizontal = 8.dp)
+                        ) {
+                            Icon(Icons.Default.Receipt, null,
+                                tint = AccentBlue, modifier = Modifier.size(14.dp))
+                            Spacer(Modifier.width(4.dp))
+                            Text("Receipt", color = AccentBlue, fontSize = 11.sp)
+                        }
+                    }
                 }
             }
         }
+
 
         // ── Expense list ──────────────────────────────────────────────────────
         if (todayExpenses.isEmpty()) {

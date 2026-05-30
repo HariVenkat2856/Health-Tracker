@@ -1,7 +1,7 @@
 {
     "logs": [
         {
-            "outputFile": "com.venkat.healthapp-mergeDebugResources-72:/values-watch-v20/values-watch-v20.xml",
+            "outputFile": "com.venkat.healthapp-mergeDebugResources-74:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
                     "source": "C:\\Users\\VHARIDAS\\.gradle\\caches\\transforms-4\\6cf9e65cdf22751f06151bbbfbe29a07\\transformed\\jetified-play-services-auth-21.1.1\\res\\values-watch-v20\\values.xml",
@@ -35,6 +35,25 @@
                         "startOffsets": "715,789,865,940,1017,1088,1156,1226",
                         "endColumns": "73,75,74,76,70,67,69,67",
                         "endOffsets": "784,860,935,1012,1083,1151,1221,1289"
+                    }
+                },
+                {
+                    "source": "C:\\Users\\VHARIDAS\\.gradle\\caches\\transforms-4\\3b34dff5ae8906b6a7a124bcfca5a14c\\transformed\\appcompat-1.6.1\\res\\values-watch-v20\\values-watch-v20.xml",
+                    "from": {
+                        "startLines": "2,5,8",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "55,214,385",
+                        "endLines": "4,7,10",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "209,380,553"
+                    },
+                    "to": {
+                        "startLines": "18,21,24",
+                        "startColumns": "4,4,4",
+                        "startOffsets": "1294,1453,1624",
+                        "endLines": "20,23,26",
+                        "endColumns": "12,12,12",
+                        "endOffsets": "1448,1619,1792"
                     }
                 }
             ]

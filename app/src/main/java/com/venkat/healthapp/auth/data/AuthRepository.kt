@@ -79,23 +79,26 @@ class AuthRepository(private val context: Context) {
     }
 
     // ── Google Sign In ────────────────────────────────────────────────────────
-    suspend fun loginWithGoogle(): AuthResult {
+    suspend fun loginWithGoogle(activityContext: Context): AuthResult {
         return try {
-            val credentialManager = CredentialManager.create(context)
+            val credentialManager = CredentialManager.create(activityContext) // ← use activityContext
             val googleIdOption = GetGoogleIdOption.Builder()
                 .setFilterByAuthorizedAccounts(false)
                 .setServerClientId(WEB_CLIENT_ID)
-                .setAutoSelectEnabled(true)
+                .setAutoSelectEnabled(false)
                 .build()
 
             val request = GetCredentialRequest.Builder()
                 .addCredentialOption(googleIdOption)
                 .build()
 
-            val result = credentialManager.getCredential(context, request)
+            val result = credentialManager.getCredential(activityContext, request) // ← here too
             handleGoogleCredential(result.credential)
         } catch (e: GetCredentialCancellationException) {
             AuthResult.Error("Sign in cancelled")
+        } catch (e: NoCredentialException) {
+            // No Google accounts on device or none previously authorized
+            AuthResult.Error("No Google account found. Please add a Google account to your device.")
         } catch (e: Exception) {
             AuthResult.Error(e.message ?: "Google sign in failed")
         }
@@ -140,6 +143,18 @@ class AuthRepository(private val context: Context) {
 
     companion object {
         // Replace with your Web Client ID from Firebase Console
-        const val WEB_CLIENT_ID = "YOUR_WEB_CLIENT_ID_FROM_FIREBASE_CONSOLE"
+        const val WEB_CLIENT_ID = "807620171706-oqghfs9b7qoo64vvimfphv439mgnekuj.apps.googleusercontent.com"
+    }
+
+    suspend fun updateDisplayName(name: String): AuthResult {
+        return try {
+            val profileUpdates = UserProfileChangeRequest.Builder()
+                .setDisplayName(name)
+                .build()
+            auth.currentUser?.updateProfile(profileUpdates)?.await()
+            AuthResult.Success(auth.currentUser!!.toAppUser())
+        } catch (e: Exception) {
+            AuthResult.Error(e.message ?: "Failed to update name")
+        }
     }
 }

@@ -14,6 +14,8 @@ import com.venkat.healthapp.expense.data.PartialPaymentDao
 import com.venkat.healthapp.expense.data.SplitExpense
 import com.venkat.healthapp.expense.data.SplitExpenseDao
 import com.venkat.healthapp.expense.data.SplitMember
+import com.venkat.healthapp.expense.receipt.Receipt
+import com.venkat.healthapp.expense.receipt.ReceiptDao
 import com.venkat.healthapp.food.data.*
 import com.venkat.healthapp.hair.data.*
 import com.venkat.healthapp.sleep.data.SleepLog
@@ -41,10 +43,11 @@ import com.venkat.healthapp.workout.data.WorkoutProgressDao
         PartialPayment::class,
         SplitExpense::class,
         SplitMember::class,
-        VaultItem::class
+        VaultItem::class,
+        Receipt::class
 
     ],
-    version = 6,
+    version = 7,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -65,6 +68,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun partialPaymentDao(): PartialPaymentDao
     abstract fun splitExpenseDao(): SplitExpenseDao
     abstract fun vaultDao(): VaultDao
+    abstract fun receiptDao(): ReceiptDao
 
 
     companion object {

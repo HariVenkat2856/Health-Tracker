@@ -243,46 +243,26 @@ fun VaultLockScreen(onUnlocked: () -> Unit) {
             onPin    = { pin = it },
             maxLen   = 6,
             onSubmit = {
-
-                when (val result = VaultPinManager.verifyPin(context, pin)) {
-
-                    is PinResult.SUCCESS -> onUnlocked()
-
-                    is PinResult.WRONG -> {
-
+                val result = VaultPinManager.verifyPin(context, pin)
+                when {
+                    result is PinResult.SUCCESS -> {
+                        onUnlocked()
+                    }
+                    result is PinResult.WRONG -> {
                         error = "Wrong PIN! ${result.attemptsLeft} attempts left"
                         pin = ""
-
-                        // Shake animation
                         scope.launch {
-
                             repeat(3) {
-
-                                shakeAnim.animateTo(
-                                    targetValue = 12f,
-                                    animationSpec = tween(80)
-                                )
-
-                                shakeAnim.animateTo(
-                                    targetValue = -12f,
-                                    animationSpec = tween(80)
-                                )
+                                shakeAnim.animateTo(12f, tween(80))
+                                shakeAnim.animateTo(-12f, tween(80))
                             }
-
-                            shakeAnim.animateTo(
-                                targetValue = 0f,
-                                animationSpec = tween(80)
-                            )
+                            shakeAnim.animateTo(0f, tween(80))
                         }
                     }
-
-                    is PinResult.LOCKED -> {
-
+                    result is PinResult.LOCKED -> {
                         error = "🔒 Too many attempts! Locked for ${result.minutesLeft} min"
                         pin = ""
                     }
-
-                    else -> {}
                 }
             }
         )
@@ -332,6 +312,61 @@ fun VaultLockScreen(onUnlocked: () -> Unit) {
                 }
             }
         }
+    }
+
+    // Add below existing Hint + Forgot PIN Row
+    Spacer(Modifier.height(8.dp))
+
+    var showResetConfirm by remember { mutableStateOf(false) }
+
+    TextButton(
+        onClick = { showResetConfirm = true },
+        modifier = Modifier.fillMaxWidth()
+    ) {
+        Icon(Icons.Default.DeleteForever, null,
+            tint = RedPill.copy(0.6f), modifier = Modifier.size(14.dp))
+        Spacer(Modifier.width(4.dp))
+        Text("Reset Vault (delete all vault data)",
+            color = RedPill.copy(0.6f), fontSize = 12.sp)
+    }
+
+// Confirm dialog
+    if (showResetConfirm) {
+        AlertDialog(
+            onDismissRequest = { showResetConfirm = false },
+            containerColor   = CardDark,
+            title = {
+                Text("⚠️ Reset Vault?", color = RedPill, fontWeight = FontWeight.Bold)
+            },
+            text = {
+                Text(
+                    "This will DELETE all saved credentials and reset your PIN.\n\n" +
+                            "This cannot be undone!",
+                    color = TextMuted, fontSize = 13.sp
+                )
+            },
+            confirmButton = {
+                Button(
+                    onClick = {
+                        // Clear PIN data
+                        context.getSharedPreferences("vault_security", android.content.Context.MODE_PRIVATE)
+                            .edit().clear().apply()
+                        showResetConfirm = false
+                        // VaultEntryPoint will now show setup screen
+                    },
+                    colors = ButtonDefaults.buttonColors(containerColor = RedPill),
+                    shape  = RoundedCornerShape(10.dp)
+                ) {
+                    Text("Yes, Reset Everything",
+                        color = Color.White, fontWeight = FontWeight.Bold)
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showResetConfirm = false }) {
+                    Text("Cancel", color = TextMuted)
+                }
+            }
+        )
     }
 
     // Recovery dialog

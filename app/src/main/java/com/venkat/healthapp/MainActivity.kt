@@ -2,6 +2,7 @@ package com.venkat.healthapp
 
 import android.app.Application
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
@@ -22,10 +23,15 @@ import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.venkat.healthapp.auth.data.AuthState
 import com.venkat.healthapp.auth.ui.AuthScreen
 import com.venkat.healthapp.auth.viewmodel.AuthViewModel
 import com.venkat.healthapp.common.*
+import com.venkat.healthapp.expense.insights.InsightScreen
+import com.venkat.healthapp.expense.receipt.ReceiptScreen
+import com.venkat.healthapp.expense.receipt.ReceiptViewModel
+import com.venkat.healthapp.expense.receipt.ReceiptViewModelFactory
 import com.venkat.healthapp.expense.ui.ExpenseScreen
 import com.venkat.healthapp.expense.ui.LendBorrowScreen
 import com.venkat.healthapp.expense.ui.SplitExpenseScreen
@@ -43,8 +49,6 @@ import com.venkat.healthapp.sleep.ui.SleepScreen
 import com.venkat.healthapp.vault.ui.VaultScreen
 import com.venkat.healthapp.workout.ui.WorkoutScreen
 
-
-
 // ── Nav routes ────────────────────────────────────────────────────────────────
 object Routes {
     const val HOME          = "home"
@@ -61,6 +65,10 @@ object Routes {
     const val LEND_BORROW   = "lend_borrow"
     const val SPLIT         = "split"
     const val VAULT         = "vault"
+    const val RECEIPTS      = "receipts"
+    const val INSIGHTS      = "insights"
+
+
 
 
 }
@@ -82,6 +90,13 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
         super.onCreate(savedInstanceState)
+
+
+        FirebaseFirestore.getInstance().clearPersistence()
+            .addOnCompleteListener {
+                Log.d("Firestore", "Cache cleared")
+            }
+
         setContent {
             HealthAppTheme {
 
@@ -140,6 +155,7 @@ fun AppRoot(vm: MainViewModel, authVm: AuthViewModel) {
             )
             AppNavHost(vm = vm, photoVm = photoVm, authVm = authVm)
         }
+
     }
 }
 
@@ -158,7 +174,13 @@ fun AppNavHost(vm: MainViewModel, photoVm: PhotoViewModel, authVm: AuthViewModel
                 onSleepTracker = { navController.navigate(Routes.SLEEP) },
                 onWorkoutTracker = { navController.navigate(Routes.WORKOUT) },
                 onExpenseTracker = { navController.navigate(Routes.EXPENSE) },
-                onVault = { navController.navigate(Routes.VAULT) },
+                onVault            = { navController.navigate(Routes.VAULT) },
+                onReceiptScanner   = { navController.navigate(Routes.RECEIPTS) },
+                onLogout         = {
+                    authVm.logout()
+                    // authState will automatically change to Unauthenticated
+                    // AppRoot will show LoginScreen automatically
+                }
             )
         }
         composable(Routes.HAIR_MAIN) {
@@ -203,6 +225,30 @@ fun AppNavHost(vm: MainViewModel, photoVm: PhotoViewModel, authVm: AuthViewModel
         composable(Routes.VAULT) {
             FeatureScaffold(title = "Secure Vault", onBack = { navController.popBackStack() }) {
                 VaultScreen(vm)
+            }
+        }
+        composable(Routes.RECEIPTS) {
+
+            val context = LocalContext.current
+
+            val receiptVm: ReceiptViewModel = viewModel(
+                factory = ReceiptViewModelFactory(
+                    context.applicationContext as Application,
+                    vm.db
+                )
+            )
+
+            FeatureScaffold(
+                title = "Receipt Scanner",
+                onBack = { navController.popBackStack() }
+            ) {
+                ReceiptScreen(receiptVm)
+            }
+        }
+
+        composable(Routes.INSIGHTS) {
+            FeatureScaffold(title = "Spending Insights", onBack = { navController.popBackStack() }) {
+                InsightScreen(vm)
             }
         }
 

@@ -1,6 +1,7 @@
 package com.venkat.healthapp.auth.viewmodel
 
 import android.app.Application
+import android.content.Context
 import androidx.lifecycle.*
 import com.venkat.healthapp.auth.data.*
 import kotlinx.coroutines.flow.*
@@ -16,9 +17,22 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
     private val _authResult = MutableStateFlow<AuthResult?>(null)
     val authResult: StateFlow<AuthResult?> = _authResult.asStateFlow()
 
-    val currentUser: AppUser? get() = repo.currentUser
-    val isLoggedIn: Boolean   get() = repo.isLoggedIn
 
+    private val _currentUser = MutableStateFlow<AppUser?>(repo.currentUser)
+    val currentUser: StateFlow<AppUser?> = _currentUser.asStateFlow()
+
+    val isLoggedIn: Boolean get() = repo.isLoggedIn
+    init {
+        // Keep _currentUser in sync with authState
+        viewModelScope.launch {
+            authState.collect { state ->
+                _currentUser.value = when (state) {
+                    is AuthState.Authenticated -> state.user
+                    else -> null
+                }
+            }
+        }
+    }
     fun loginWithEmail(email: String, password: String) {
         viewModelScope.launch {
             _authResult.value = AuthResult.Loading
@@ -33,10 +47,10 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun loginWithGoogle() {
+    fun loginWithGoogle(activityContext: Context) {
         viewModelScope.launch {
             _authResult.value = AuthResult.Loading
-            _authResult.value = repo.loginWithGoogle()
+            _authResult.value = repo.loginWithGoogle(activityContext)
         }
     }
 
@@ -46,10 +60,24 @@ class AuthViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
+    fun updateDisplayName(name: String) {
+        viewModelScope.launch {
+            val result = repo.updateDisplayName(name)
+            if (result is AuthResult.Success) {
+                _currentUser.value = _currentUser.value?.copy(displayName = name)
+            }
+        }
+    }
+
+
     fun logout() {
         repo.logout()
         _authResult.value = null
+        _currentUser.value = null
     }
 
     fun clearResult() { _authResult.value = null }
+
+
+
 }

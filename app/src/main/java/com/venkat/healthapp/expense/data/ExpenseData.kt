@@ -116,6 +116,8 @@ interface ExpenseDao {
 
     @Query("SELECT COUNT(*) FROM expenses WHERE date LIKE :monthPrefix || '%'")
     fun countForMonth(monthPrefix: String): Flow<Int>
+
+
 }
 
 @Dao

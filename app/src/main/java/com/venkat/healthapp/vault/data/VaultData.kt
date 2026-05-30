@@ -171,7 +171,7 @@ object VaultPinManager {
     fun verifyPin(context: android.content.Context, pin: String): PinResult {
         val p = prefs(context)
 
-        // Check lockout
+        // Check lockout first
         val lockedAt = p.getLong(KEY_LOCKED_AT, 0L)
         if (lockedAt > 0) {
             val elapsed = System.currentTimeMillis() - lockedAt
@@ -179,15 +179,20 @@ object VaultPinManager {
                 val remaining = ((LOCK_DURATION - elapsed) / 1000 / 60).toInt() + 1
                 return PinResult.LOCKED(remaining)
             } else {
-                // Unlock
                 p.edit().putLong(KEY_LOCKED_AT, 0L).putInt(KEY_ATTEMPTS, 0).apply()
             }
         }
 
         val stored   = p.getString(KEY_PIN_HASH, "") ?: ""
         val attempts = p.getInt(KEY_ATTEMPTS, 0)
+        val entered  = hashPin(pin)
 
-        return if (hashPin(pin) == stored) {
+        // Add this log to debug
+        android.util.Log.d("VaultPin", "Stored: $stored")
+        android.util.Log.d("VaultPin", "Entered: $entered")
+        android.util.Log.d("VaultPin", "Match: ${entered == stored}")
+
+        return if (entered == stored) {
             p.edit().putInt(KEY_ATTEMPTS, 0).apply()
             PinResult.SUCCESS
         } else {
@@ -240,7 +245,8 @@ object VaultPinManager {
     private fun hashPin(pin: String): String {
         val digest = java.security.MessageDigest.getInstance("SHA-256")
         val hash   = digest.digest(pin.toByteArray(Charsets.UTF_8))
-        return Base64.encodeToString(hash, Base64.DEFAULT)
+        // Use NO_WRAP to avoid newline characters in Base64
+        return Base64.encodeToString(hash, Base64.NO_WRAP)  // ← change DEFAULT to NO_WRAP
     }
 
     private fun prefs(context: android.content.Context) =

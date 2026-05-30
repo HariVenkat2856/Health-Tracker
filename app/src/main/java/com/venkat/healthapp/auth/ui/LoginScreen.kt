@@ -12,6 +12,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.*
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.*
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.*
 import androidx.compose.ui.text.style.TextAlign
@@ -50,6 +51,8 @@ fun LoginScreen(
     onLoggedIn: () -> Unit,
     onRegister: () -> Unit
 ) {
+    val context = LocalContext.current
+
     var email       by remember { mutableStateOf("") }
     var password    by remember { mutableStateOf("") }
     var showPass    by remember { mutableStateOf(false) }
@@ -237,9 +240,9 @@ fun LoginScreen(
 
                 // Google Sign In
                 OutlinedButton(
-                    onClick  = {
+                    onClick = {
                         isLoading = true
-                        authVm.loginWithGoogle()
+                        authVm.loginWithGoogle(context)
                     },
                     modifier = Modifier.fillMaxWidth().height(52.dp),
                     shape    = RoundedCornerShape(12.dp),
@@ -295,6 +298,7 @@ fun RegisterScreen(
     onLoggedIn: () -> Unit,
     onLogin: () -> Unit
 ) {
+    val context = LocalContext.current
     var name        by remember { mutableStateOf("") }
     var email       by remember { mutableStateOf("") }
     var password    by remember { mutableStateOf("") }
@@ -488,7 +492,7 @@ fun RegisterScreen(
 
                 // Google
                 OutlinedButton(
-                    onClick  = { isLoading = true; authVm.loginWithGoogle() },
+                    onClick = { isLoading = true; authVm.loginWithGoogle(context) },
                     modifier = Modifier.fillMaxWidth().height(52.dp),
                     shape    = RoundedCornerShape(12.dp),
                     border   = BorderStroke(1.dp, BorderDark),
