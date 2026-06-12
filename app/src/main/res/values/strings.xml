@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Health Tracker</string>
+    <string name="widget_expense_desc">Today\'s expense summary and quick add</string>
+    <string name="widget_water_desc">Water intake tracker with quick add</string>
+    <string name="widget_hair_desc">Daily medicine checklist progress</string>
+</resources>

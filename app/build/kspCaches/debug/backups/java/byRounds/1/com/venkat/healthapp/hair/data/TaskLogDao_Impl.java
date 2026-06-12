@@ -1,6 +1,7 @@
 package com.venkat.healthapp.hair.data;
 
 import android.database.Cursor;
+import android.os.CancellationSignal;
 import androidx.annotation.NonNull;
 import androidx.room.CoroutinesRoom;
 import androidx.room.EntityDeletionOrUpdateAdapter;
@@ -191,6 +192,58 @@ public final class TaskLogDao_Impl implements TaskLogDao {
         _statement.release();
       }
     });
+  }
+
+  @Override
+  public Object getTasksForDateSync(final String date,
+      final Continuation<? super List<TaskLog>> $completion) {
+    final String _sql = "SELECT * FROM task_logs WHERE date = ?";
+    final RoomSQLiteQuery _statement = RoomSQLiteQuery.acquire(_sql, 1);
+    int _argIndex = 1;
+    _statement.bindString(_argIndex, date);
+    final CancellationSignal _cancellationSignal = DBUtil.createCancellationSignal();
+    return CoroutinesRoom.execute(__db, false, _cancellationSignal, new Callable<List<TaskLog>>() {
+      @Override
+      @NonNull
+      public List<TaskLog> call() throws Exception {
+        final Cursor _cursor = DBUtil.query(__db, _statement, false, null);
+        try {
+          final int _cursorIndexOfId = CursorUtil.getColumnIndexOrThrow(_cursor, "id");
+          final int _cursorIndexOfDate = CursorUtil.getColumnIndexOrThrow(_cursor, "date");
+          final int _cursorIndexOfTaskId = CursorUtil.getColumnIndexOrThrow(_cursor, "taskId");
+          final int _cursorIndexOfTaskName = CursorUtil.getColumnIndexOrThrow(_cursor, "taskName");
+          final int _cursorIndexOfSection = CursorUtil.getColumnIndexOrThrow(_cursor, "section");
+          final int _cursorIndexOfCompleted = CursorUtil.getColumnIndexOrThrow(_cursor, "completed");
+          final int _cursorIndexOfCompletedAt = CursorUtil.getColumnIndexOrThrow(_cursor, "completedAt");
+          final List<TaskLog> _result = new ArrayList<TaskLog>(_cursor.getCount());
+          while (_cursor.moveToNext()) {
+            final TaskLog _item;
+            final int _tmpId;
+            _tmpId = _cursor.getInt(_cursorIndexOfId);
+            final String _tmpDate;
+            _tmpDate = _cursor.getString(_cursorIndexOfDate);
+            final String _tmpTaskId;
+            _tmpTaskId = _cursor.getString(_cursorIndexOfTaskId);
+            final String _tmpTaskName;
+            _tmpTaskName = _cursor.getString(_cursorIndexOfTaskName);
+            final String _tmpSection;
+            _tmpSection = _cursor.getString(_cursorIndexOfSection);
+            final boolean _tmpCompleted;
+            final int _tmp;
+            _tmp = _cursor.getInt(_cursorIndexOfCompleted);
+            _tmpCompleted = _tmp != 0;
+            final long _tmpCompletedAt;
+            _tmpCompletedAt = _cursor.getLong(_cursorIndexOfCompletedAt);
+            _item = new TaskLog(_tmpId,_tmpDate,_tmpTaskId,_tmpTaskName,_tmpSection,_tmpCompleted,_tmpCompletedAt);
+            _result.add(_item);
+          }
+          return _result;
+        } finally {
+          _cursor.close();
+          _statement.release();
+        }
+      }
+    }, $completion);
   }
 
   @NonNull

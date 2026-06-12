@@ -18,6 +18,16 @@ data class WaterLog(
     fun logsForDate(date: String): Flow<List<WaterLog>>
     @Query("SELECT SUM(amountMl) FROM water_logs WHERE date=:date")
     fun totalForDate(date: String): Flow<Int?>
+
+
+
+    // Add to WaterLogDao
+    @Query("SELECT SUM(amountMl) FROM water_logs WHERE date = :date")
+    suspend fun totalForDateSync(date: String): Int?
+
     @Query("SELECT DISTINCT date FROM water_logs ORDER BY date DESC")
     fun allDates(): Flow<List<String>>
+
+
+
 }

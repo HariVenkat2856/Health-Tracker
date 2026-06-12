@@ -125,6 +125,45 @@
                 android:resource="@xml/file_paths" />
         </provider>
 
+        <receiver
+            android:name="com.venkat.healthapp.widget.ExpenseWidget"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.venkat.healthapp.WIDGET_REFRESH" />
+                <action android:name="com.venkat.healthapp.WIDGET_QUICK_ADD" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_expense_info" />
+        </receiver>
+        <receiver
+            android:name="com.venkat.healthapp.widget.WaterWidget"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+                <action android:name="com.venkat.healthapp.WATER_ADD_250" />
+                <action android:name="com.venkat.healthapp.WATER_ADD_500" />
+                <action android:name="com.venkat.healthapp.WATER_REFRESH" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_water_info" />
+        </receiver>
+        <receiver
+            android:name="com.venkat.healthapp.widget.HairWidget"
+            android:exported="true" >
+            <intent-filter>
+                <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
+            </intent-filter>
+
+            <meta-data
+                android:name="android.appwidget.provider"
+                android:resource="@xml/widget_hair_info" />
+        </receiver>
+
         <service
             android:name="com.google.firebase.components.ComponentDiscoveryService"
             android:directBootAware="true"

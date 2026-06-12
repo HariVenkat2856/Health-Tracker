@@ -17,6 +17,7 @@ import com.venkat.healthapp.sleep.data.SleepLog
 import com.venkat.healthapp.sync.SyncManager
 import com.venkat.healthapp.vault.data.VaultItem
 import com.venkat.healthapp.water.data.*
+import com.venkat.healthapp.widget.WidgetUpdater
 import com.venkat.healthapp.workout.data.WorkoutLog
 import com.venkat.healthapp.workout.data.getTodaySplit
 import kotlinx.coroutines.flow.*
@@ -150,6 +151,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
                 DailySummary(today, ALL_TASKS.size, done.coerceAtLeast(0), _shampooToday.value)
             )
             syncToCloud()  // ← Sync after every task tick
+            WidgetUpdater.updateHair(app)
         }
     }
 
@@ -283,6 +285,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             db.waterLogDao().insert(WaterLog(date = today, amountMl = ml))
             syncToCloud()
+            WidgetUpdater.updateWater(app)
         }
     }
 
@@ -409,6 +412,7 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
                 scheduleNoteReminder(app, id.toInt(), expense.title, expense.amount)
             }
             syncToCloud()
+            WidgetUpdater.updateExpense(app) // ← ADD
         }
     }
 
@@ -570,4 +574,6 @@ class MainViewModel(val app: Application) : AndroidViewModel(app) {
             _currentUser.update { it?.copy(displayName = name) }
         }
     }
+
+
 }

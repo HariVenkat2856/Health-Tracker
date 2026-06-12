@@ -11,10 +11,10 @@ INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\ap
 	android:name
 		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:82:13-62
 manifest
-ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-92:12
-INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-92:12
-INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-92:12
-INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-92:12
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-131:12
+INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-131:12
+INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-131:12
+INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:2:1-131:12
 MERGED from [com.google.mlkit:text-recognition:16.0.1] C:\Users\VHARIDAS\.gradle\caches\transforms-4\f1b7a4376a994df45e7cf7ceafdb4d60\transformed\jetified-text-recognition-16.0.1\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.android.libraries.identity.googleid:googleid:1.1.1] C:\Users\VHARIDAS\.gradle\caches\transforms-4\36c5da2648cc77ba4fae449cb1c3ea7e\transformed\jetified-googleid-1.1.1\AndroidManifest.xml:2:1-7:12
 MERGED from [com.google.firebase:firebase-auth-ktx:23.0.0] C:\Users\VHARIDAS\.gradle\caches\transforms-4\4fd345984220e5dbed6e523165f17da2\transformed\jetified-firebase-auth-ktx-23.0.0\AndroidManifest.xml:2:1-17:12
@@ -246,8 +246,8 @@ ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\s
 	android:name
 		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:17:19-57
 application
-ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:22:5-91:19
-INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:22:5-91:19
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:22:5-130:19
+INJECTED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:22:5-130:19
 MERGED from [com.google.firebase:firebase-auth-ktx:23.0.0] C:\Users\VHARIDAS\.gradle\caches\transforms-4\4fd345984220e5dbed6e523165f17da2\transformed\jetified-firebase-auth-ktx-23.0.0\AndroidManifest.xml:7:5-15:19
 MERGED from [com.google.firebase:firebase-auth-ktx:23.0.0] C:\Users\VHARIDAS\.gradle\caches\transforms-4\4fd345984220e5dbed6e523165f17da2\transformed\jetified-firebase-auth-ktx-23.0.0\AndroidManifest.xml:7:5-15:19
 MERGED from [com.google.firebase:firebase-auth:23.0.0] C:\Users\VHARIDAS\.gradle\caches\transforms-4\7326f081f9a0f70f2811a06285b65f15\transformed\jetified-firebase-auth-23.0.0\AndroidManifest.xml:28:5-73:19
@@ -444,6 +444,60 @@ ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\s
 		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:78:13-37
 	android:name
 		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:77:19-79
+receiver#com.venkat.healthapp.widget.ExpenseWidget
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:92:9-103:20
+	android:exported
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:94:13-36
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:93:13-49
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE+action:name:com.venkat.healthapp.WIDGET_QUICK_ADD+action:name:com.venkat.healthapp.WIDGET_REFRESH
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:95:13-99:29
+action#android.appwidget.action.APPWIDGET_UPDATE
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:96:17-83
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:96:25-81
+action#com.venkat.healthapp.WIDGET_REFRESH
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:97:17-77
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:97:25-75
+action#com.venkat.healthapp.WIDGET_QUICK_ADD
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:98:17-79
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:98:25-77
+meta-data#android.appwidget.provider
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:100:13-102:62
+	android:resource
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:102:17-60
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:101:17-58
+receiver#com.venkat.healthapp.widget.WaterWidget
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:105:9-117:20
+	android:exported
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:107:13-36
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:106:13-47
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE+action:name:com.venkat.healthapp.WATER_ADD_250+action:name:com.venkat.healthapp.WATER_ADD_500+action:name:com.venkat.healthapp.WATER_REFRESH
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:108:13-113:29
+action#com.venkat.healthapp.WATER_ADD_250
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:110:17-76
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:110:25-74
+action#com.venkat.healthapp.WATER_ADD_500
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:111:17-76
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:111:25-74
+action#com.venkat.healthapp.WATER_REFRESH
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:112:17-76
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:112:25-74
+receiver#com.venkat.healthapp.widget.HairWidget
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:119:9-128:20
+	android:exported
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:121:13-36
+	android:name
+		ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:120:13-46
+intent-filter#action:name:android.appwidget.action.APPWIDGET_UPDATE
+ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:122:13-124:29
 meta-data#android.support.FILE_PROVIDER_PATHS
 ADDED from D:\venkat bkp\TransNew\VENKAT\HealthApp_v2_WaterFixed\HealthApp\app\src\main\AndroidManifest.xml:86:13-88:54
 	android:resource

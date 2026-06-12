@@ -37,6 +37,10 @@ data class ScalpPhoto(
     @Upsert suspend fun upsert(log: TaskLog)
     @Query("UPDATE task_logs SET completed=:done,completedAt=:at WHERE date=:date AND taskId=:taskId")
     suspend fun updateTask(date: String, taskId: String, done: Boolean, at: Long)
+
+    // Add to TaskLogDao
+    @Query("SELECT * FROM task_logs WHERE date = :date")
+    suspend fun getTasksForDateSync(date: String): List<TaskLog>
 }
 
 @Dao interface DailySummaryDao {

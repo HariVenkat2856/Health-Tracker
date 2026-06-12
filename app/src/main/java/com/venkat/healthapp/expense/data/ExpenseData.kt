@@ -117,7 +117,14 @@ interface ExpenseDao {
     @Query("SELECT COUNT(*) FROM expenses WHERE date LIKE :monthPrefix || '%'")
     fun countForMonth(monthPrefix: String): Flow<Int>
 
+    @Query("SELECT SUM(amount) FROM expenses WHERE date = :date")
+    suspend fun totalForDateSync(date: String): Float?
 
+    @Query("SELECT SUM(amount) FROM expenses WHERE date LIKE :monthPrefix || '%'")
+    suspend fun totalForMonthSync(monthPrefix: String): Float?
+
+    @Query("SELECT COUNT(*) FROM expenses WHERE date = :date")
+    suspend fun countForDateSync(date: String): Int
 }
 
 @Dao
@@ -142,6 +149,8 @@ interface ExpenseReminderDao {
 
     @Query("UPDATE expense_reminder SET isDone = 1 WHERE expenseId = :expenseId")
     suspend fun markDone(expenseId: Int)
+
+
 }
 
 // ── Helper data class for category aggregation ────────────────────────────────
